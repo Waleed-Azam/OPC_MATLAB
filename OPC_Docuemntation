@@ -1,0 +1,25 @@
+% Step 1: Locate Your OPC UA Server
+serverList = opcuaserverinfo('localhost')
+%Locate the server of interest by using the findDescription function to search for a 
+%specific character vector in the server description.
+hsInfo = findDescription(serverList,'Simulation')
+%Step 2: Create an OPC UA Client and Connect to the Server
+uaClient = opcua(hsInfo)
+uaClient = opcua('localhost',4840)
+connect(uaClient)
+%Step 3: Browse OPC UA Server Namespace (Browsing all the tags for the data validation)
+serverNodes = browseNamespace(uaClient)
+%Step 4: Read Current Values from the OPC UA Server
+[val,ts,qual] = readValue(uaClient,serverNodes)
+%Step 5: Read Historical Data from the OPC UA Server
+[serverNodes.Historizing]
+{serverNodes.AccessLevelHistory}
+simNode = findNodeByName(uaClient.Namespace,'Simulation')
+sineNode = findNodeByName(simNode,'Sinusoid', '-partial');
+randNode = findNodeByName(simNode,'Random', '-partial')
+histData = readHistory(uaClient,[sineNode,randNode],datetime('now')-seconds(10),datetime('now'))
+%Step 6: Plot the Data
+plot(histData)
+legend show
+%Step 7: Clean Up
+disconnect(uaClient)
