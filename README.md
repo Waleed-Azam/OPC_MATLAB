@@ -2,7 +2,7 @@
 Interfacing of the MATLAB with the Open Platform Communication
 
 
-%MATLAB Documentation
+MATLAB Documentation
 
 https://se.mathworks.com/help/opc/ug/access-data-from-opc-ua-servers.html
 
